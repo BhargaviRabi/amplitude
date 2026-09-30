@@ -1,0 +1,11 @@
+Evaluation API verification (steps 2.5 / 2.6)
+
+Request:
+GET https://api.lab.amplitude.com/v1/vardata?device_id=exercise-test-device-001&flag_keys=techvedika-memominder-label
+Authorization: Api-Key client-jGqN7TxP3L1F8Vdfha3I7xeRz49OTVCK
+
+Response (200 OK):
+{"techvedika-memominder-label":{"evaluationId":"1729338499385_1790669252923_2121520891","expKey":"exp-1","key":"add","payload":{"button_label":"Add"}}}
+
+This confirms the flag/experiment returns both a variant key ("add") and its payload
+({"button_label":"Add"}) for a brand-new device, as required by step 2.6.
