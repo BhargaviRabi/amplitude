@@ -1,4 +1,4 @@
-# Implementing Amplitude Experiment — Technical Exercise
+# Implementing Amplitude Experiment — Technical Exercise 
 
 Status: **Complete and verified live**, end-to-end, in your own `techvedika-088965`
 Amplitude organization (switched from the shared `Shared Partner Training` sandbox,
@@ -54,13 +54,56 @@ where this account only had Member access and couldn't retrieve the Analytics AP
   redoing — just re-screenshot if you want your own name on the "Owned by" field
   instead of relying on mine, though this account is already `bhargavi.rabi`).
 
-## Files
+## Project structure
 
-- `memominder/index.html` — the working app, already pointing at the real API key
-  and deployment key above. Serve it locally (e.g. `python3 -m http.server`) and open
-  it, or host it anywhere.
-- `evidence/techvedika-org/` — screenshots from this final, real run (project you own,
-  in your own org).
-- `evidence/*.jpg` (top-level) and `evidence/2.*-*.jpg` — screenshots from the earlier
-  attempt in the shared `Shared Partner Training` sandbox project, before switching
-  orgs. Superseded, kept for reference only.
+```text
+experiment-implementation/
+|-- README.md
+|-- memominder/
+|   `-- index.html
+|-- evidence/
+|   |-- *.jpg and *.txt                 # Earlier shared-sandbox run
+|   `-- techvedika-org/                 # Final run in the owned organization
+|-- slides/
+|   `-- *.jpg                           # Screenshots placed in the slide deck
+`-- output/
+    `-- Implementing_Experiment_Technical_Exercise_MemoMinder.pptx
+```
+
+There is no build step or package manifest. The app is a self-contained HTML file
+with inline CSS and JavaScript; it loads Amplitude Analytics and the Experiment JS
+SDK from their CDNs.
+
+## Codebase
+
+`memominder/index.html` contains the complete app and SDK integration:
+
+- The markup and inline styles define the memo composer, memo list, and empty state.
+- The Analytics browser SDK is initialized with autocapture enabled.
+- The Experiment SDK is initialized with the client deployment key. After
+  `experiment.start()` resolves, `setLabel()` reads the `button_label` payload from
+  the `techvedika-memominder-label` variant and updates the Add button.
+- The memo handlers add, close, and delete items in the page. Each action sends a
+  `Memo Interacted` event with `action` and `memo_id` properties. Memo data is kept
+  in page memory and is not persisted across reloads.
+
+## Run locally
+
+From the repository root, serve the app with Python's built-in HTTP server:
+
+```bash
+cd projects/experiment-implementation
+python3 -m http.server 8000
+```
+
+Open `http://localhost:8000/memominder/` in a browser. The app requires network
+access to load the SDKs and send events to Amplitude.
+
+## Supporting files
+
+- `evidence/techvedika-org/` contains screenshots from the final run in the owned
+  organization.
+- Top-level `evidence/` files document the earlier shared-sandbox attempt; those
+  artifacts are superseded but retained for reference.
+- `slides/` contains the screenshots used in the presentation.
+- `output/` contains the generated PowerPoint deck.
